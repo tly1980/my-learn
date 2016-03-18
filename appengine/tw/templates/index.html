@@ -13,13 +13,16 @@
     <script type="text/babel">
 var Tweets = React.createClass({
   render: function() {
-    var createItem = function(item) {
-      return <li key={item.key_id}>{item.text}</li>;
+    var showItem = function(item) {
+      return <li key={item.key_id}>
+        <div>
+          <p>{item.text}</p>
+          <p>{item.timestamp}</p>
+        </div>
+      </li>;
     };
 
-    console.log("aa", typeof(this.props.items));
-
-    return <ul>{this.props.items.map(createItem)}</ul>;
+    return <ul>{this.props.items.map(showItem)}</ul>;
   }
 });
 
@@ -48,10 +51,15 @@ var TweetsApp = React.createClass({
   },
 
   handleSubmit: function(e) {
-//    e.preventDefault();
-//    var nextItems = this.state.items.concat([{text: this.state.text, id: Date.now()}]);
-//    var nextText = '';
-//    this.setState({items: nextItems, text: nextText});
+      var that = this;
+      e.preventDefault();
+      $.post(that.props.url,
+        {'text': that.state.text},
+        function(result) {
+          that.setState({
+            items: result
+          });
+      });
   },
   render: function() {
     return (
@@ -68,7 +76,6 @@ var TweetsApp = React.createClass({
 });
 
 ReactDOM.render(<TweetsApp url="http://localhost:8080/tw/" />, document.getElementById('twapp'));    
-
   </script>
   </body>
 </html>

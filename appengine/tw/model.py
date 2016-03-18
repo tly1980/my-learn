@@ -14,4 +14,5 @@ class Message(ndb.Model):
   def to_d(self):
     d = self.to_dict()
     d['timestamp'] = str(d['timestamp'])
+    d['key_id'] = self.key.id()
     return d

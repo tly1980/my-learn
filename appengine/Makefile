@@ -1,5 +1,5 @@
 run:
-	dev_appserver.py hello_app
+	dev_appserver.py tw
 
 uat:
 	appcfg.py --version uat --noauth_local_webserver -A hot-zones update hello_app/

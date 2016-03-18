@@ -20,6 +20,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class TweetsApi(webapp2.RequestHandler):
   def get(self):
     json_txt = json.dumps([p.to_d() for p in model.Message.query_message().fetch()])
+    self.response.headers['Content-Type'] = "application/json; charset=utf-8"
     self.response.write(json_txt)
 
   def post(self):

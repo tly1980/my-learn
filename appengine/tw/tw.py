@@ -25,15 +25,26 @@ class TweetsApi(webapp2.RequestHandler):
 
   def post(self):
     text = self.request.get("text")
-    msg = model.Message(text=text, parent=model.DEFAULT_MSG_KEY)
+    user = users.get_current_user()
+    user_email = user.email() if user else None
+    msg = model.Message(text=text,
+      parent=model.DEFAULT_MSG_KEY,
+      user_email=user_email)
     msg.put()
     self.get()
 
 
 class FrontPage(webapp2.RequestHandler):
   def get(self):
+    user = users.get_current_user()
+    logout_url = users.create_logout_url('/')
+    login_url = users.create_login_url('/')
     template = JINJA_ENVIRONMENT.get_template('index.html')
-    self.response.write(template.render({}))
+    self.response.write(template.render(
+      {'user': user,
+       'logout_url': logout_url,
+       'login_url': login_url
+      }))
 
 class AuthPage(webapp2.RequestHandler):
   def get(self):

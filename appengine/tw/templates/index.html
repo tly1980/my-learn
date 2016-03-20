@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="/static/page.css">
     <meta charset="UTF-8" />
     <title>Hello React!</title>
-    </head>
+
+  </head>
   <body>
     <div id="twapp"></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.7/react.js"></script>
@@ -16,14 +18,17 @@ var Tweets = React.createClass({
   render: function() {
     var showItem = function(item) {
       return <li key={item.key_id}>
-        <div>
+        <div className="msgcell">
           <p>{item.text}</p>
-          <time>{item.timestamp}</time>
+          <div className="timestamp">
+            <span className="author">{item.user_email || "anonymous"}</span>
+            <time>{item.timestamp}</time>
+          </div>
         </div>
       </li>;
     };
 
-    return <ul>{this.props.items.map(showItem)}</ul>;
+    return <ul className="msglst">{this.props.items.map(showItem)}</ul>;
   }
 });
 
@@ -48,6 +53,10 @@ var TweetsApp = React.createClass({
   },
 
   onChange: function(e) {
+    var txt = e.target.value;
+    if (txt === '') {
+
+    }
     this.setState({text: e.target.value});
   },
 
@@ -61,23 +70,28 @@ var TweetsApp = React.createClass({
             items: result
           });
       });
+      this.state.text = "";
   },
   render: function() {
+    console.log("render");
     return (
       <div>
+        <div className="new_input">
         <form onSubmit={this.handleSubmit}>
-          <input onChange={this.onChange} value={this.state.text} />
-          <button>{'Tweet'}</button>
+            <div className="input_wrapper">
+              <textarea onChange={this.onChange} value={this.state.text} />
+            </div>
+            <button>{'Tweet'}</button>
         </form>
-        <hr/>
-        <h3>Last Tweets</h3>        
+        </div>
+        <h3>Latest Tweets</h3>
         <Tweets items={this.state.items} />
       </div>
     );
   }
 });
 
-ReactDOM.render(<TweetsApp url="http://localhost:8080/tw/" />, document.getElementById('twapp'));    
+ReactDOM.render(<TweetsApp url="/tw/" />, document.getElementById('twapp'));    
   </script>
   </body>
 </html>

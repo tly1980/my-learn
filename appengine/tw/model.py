@@ -1,3 +1,4 @@
+import datetime
 from google.appengine.ext import ndb
 
 DEFAULT_MSG_KEY=ndb.Key("msg", "public")
@@ -13,6 +14,7 @@ class Message(ndb.Model):
 
   def to_d(self):
     d = self.to_dict()
-    d['timestamp'] = str(d['timestamp'])
+
+    d['timestamp'] = d['timestamp'].strftime('%Y-%m-%d %H:%M')
     d['key_id'] = self.key.id()
     return d
